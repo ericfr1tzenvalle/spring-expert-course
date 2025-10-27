@@ -1,0 +1,66 @@
+Seção 3 - Arquitetura do Spring Boot
+
+Container Spring:
+- O container gerencia, instancia e registra todos os componentes da aplicação (beans).
+- Constituído por:
+    • Configurations → agregam beans e podem ler application.yml / application.properties.
+    • Beans → objetos gerenciados pelo container.
+    • Componentes → Services, Repositories e Controllers (especializações de @Component).
+
+Camadas da aplicação:
+- Service → lógica de negócio, relacionada a um domínio específico.
+- Repository → acesso a dados (SQL ou NoSQL).
+- Controller → lida com requisições HTTP ou web; pode ser @Controller ou @RestController.
+
+ApplicationContext:
+- Permite acessar e manipular beans em runtime.
+
+--------------------------------------------------
+Seção 3.23:
+- Criamos projeto para visualizar leitura de beans e arquitetura Spring.
+- Classe main com @SpringBootApplication:
+    • @Configuration → classe fonte de beans.
+    • @EnableAutoConfiguration → ativa configuração automática do Spring Boot.
+    • @ComponentScan → escaneia pacotes para localizar beans.
+- Apenas uma classe deve ter @SpringBootApplication.
+- Podemos fazer pré-configurações, mas geralmente não alteramos a main.
+
+SpringApplicationBuilder:
+- Usado para criar aplicações personalizadas e rodar o projeto.
+- Métodos principais:
+    • run(args) → inicia a aplicação.
+    • context() → retorna ApplicationContext (aplicação precisa estar rodando).
+    • profiles() → define profiles ativos.
+    • properties() → define propriedades antes do run().
+    • listeners() → adiciona ApplicationListeners para eventos do ciclo de vida.
+
+--------------------------------------------------
+Seção 3.24:
+- Criamos exemplo de Montadora com:
+    • Carro → classe base, contém motor, modelo, cor e montadora.
+    • Chave → referência à montadora e tipo da chave.
+    • HondaHRV → extende Carro, define valores padrão.
+    • Montadora (Enum) → enum das montadoras (HONDA, TOYOTA).
+    • Motor → atributos: modelo, cavalos, cilindros, litragem, tipo.
+    • TipoMotor (Enum) → ASPIRADO, TURBO, ELETRICO.
+    • CarroStatus (Record) → representa status do carro após ignição.
+
+--------------------------------------------------
+Seções 3.25 a 3.29:
+- Classe com @Configuration → fornece configurações para o container Spring.
+- @Bean → define um bean gerenciado pelo Spring.
+- @Primary → define bean padrão quando houver múltiplas implementações.
+- @Qualifier → seleciona qual bean usar em caso de conflito.
+- Criação de annotations personalizadas (@Aspirado, @Eletrico, @Turbo) para diferenciar beans.
+- Exemplo: injeção de motor e tipo de motor via beans em TesteFabricaController.
+
+--------------------------------------------------
+Resumo até 3.29:
+- Spring Boot organiza a aplicação em Controller, Service e Repository.
+- Container Spring gerencia beans e configurações.
+- ApplicationContext permite acesso programático aos beans.
+- @SpringBootApplication centraliza configuração, scan de componentes e auto-configuração.
+- SpringApplicationBuilder permite personalizar inicialização.
+- @Configuration e @Bean modularizam a aplicação.
+- @Primary e @Qualifier resolvem conflitos de beans.
+- Criação de annotations personalizadas ajuda a simplificar injeção de beans específicos.

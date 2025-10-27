@@ -1,0 +1,87 @@
+=============================
+SPRING DATA JPA CHEAT SHEET
+=============================
+
+AUTOMATIC REPOSITORY METHODS (IMPLEMENTAÇÕES AUTOMÁTICAS)
+---------------------------------------------------------
+
+1. BUSCAR (READ)
+----------------
+Exemplos básicos:
+- List<Produto> findByNome(String nome);
+- Optional<Produto> findById(Long id);
+- List<Produto> findAll();
+
+Operadores comuns:
+
+| Operador           | Exemplo                                        | Descrição                       |
+|-------------------|-----------------------------------------------|---------------------------------|
+| And                | findByNomeAndPreco(String n, Double p)       | Combina condições               |
+| Or                 | findByNomeOrPreco(String n, Double p)        | Ou                              |
+| Between            | findByPrecoBetween(Double min, Double max)   | Intervalo                       |
+| LessThan           | findByPrecoLessThan(Double p)                | Menor que                       |
+| LessThanEqual      | findByPrecoLessThanEqual(Double p)           | Menor ou igual                  |
+| GreaterThan        | findByPrecoGreaterThan(Double p)             | Maior que                       |
+| GreaterThanEqual   | findByPrecoGreaterThanEqual(Double p)        | Maior ou igual                  |
+| Like               | findByNomeLike(String n)                     | Com % ou _                       |
+| StartingWith       | findByNomeStartingWith(String prefix)        | Começa com                       |
+| EndingWith         | findByNomeEndingWith(String sufixo)          | Termina com                       |
+| Containing         | findByNomeContaining(String str)             | Contém substring                 |
+| IgnoreCase         | findByNomeIgnoreCase(String n)               | Ignora maiúsculas/minúsculas    |
+
+---------------------------------------------------------
+2. CONTAGEM E EXISTÊNCIA
+------------------------
+- long countByNome(String nome);      // Quantos produtos têm esse nome
+- boolean existsByNome(String nome);  // Existe pelo menos 1 produto com esse nome
+
+---------------------------------------------------------
+3. ORDENAÇÃO
+-------------
+- List<Produto> findByNomeOrderByPrecoAsc(String nome);   // Crescente
+- List<Produto> findByNomeOrderByPrecoDesc(String nome);  // Decrescente
+
+---------------------------------------------------------
+4. LIMITAR RESULTADOS
+---------------------
+- Produto findFirstByOrderByPrecoDesc();        // Produto mais caro
+- List<Produto> findTop3ByOrderByPrecoAsc();   // 3 produtos mais baratos
+
+---------------------------------------------------------
+5. PAGINAÇÃO (Pageable)
+-----------------------
+- Page<Produto> findByPrecoGreaterThan(Double preco, Pageable pageable);
+
+Exemplo de uso:
+Pageable pageable = PageRequest.of(0, 5, Sort.by("preco").descending());
+Page<Produto> pagina = produtoRepository.findByPrecoGreaterThan(50.0, pageable);
+
+---------------------------------------------------------
+6. EXCLUSÃO AUTOMÁTICA
+----------------------
+- void deleteByNome(String nome);
+- long deleteByPrecoLessThan(Double preco);
+
+---------------------------------------------------------
+7. COMBINAÇÕES COMPLEXAS
+------------------------
+- List<Produto> findByNomeContainingAndPrecoBetween(String nome, Double min, Double max);
+- List<Produto> findByNomeStartingWithOrPrecoGreaterThan(String prefix, Double preco);
+
+---------------------------------------------------------
+8. PALAVRAS-CHAVE DERIVÁVEIS (RESUMO)
+-------------------------------------
+By, And, Or, Between, LessThan, LessThanEqual, GreaterThan,
+GreaterThanEqual, Like, Not, In, OrderBy, Top, First, IgnoreCase,
+StartingWith, EndingWith, Containing
+
+---------------------------------------------------------
+DICAS RÁPIDAS
+-------------
+- Prefira query derivation (nome do método) antes de usar @Query.
+- Use Optional para evitar NullPointerException ao buscar por ID.
+- Combine Pageable + Sort para performance em listas grandes.
+- Para salvar múltiplos registros, use saveAll para não abrir várias transações.
+- Evite operações pesadas dentro de loops de save.
+
+---------------------------------------------------------
